@@ -1,12 +1,12 @@
 name: AWS ECR push
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
-
+  
 jobs:
   deploy:
     name: Deploy
@@ -30,8 +30,8 @@ jobs:
     - name: Build, tag, and push the image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }} | tr -d '\n' > $GITHUB_ENV
-        ECR_REPOSITORY: ${{ secrets.REPO_NAME }} | tr -d '\n' > $GITHUB_ENV
+        ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }} 
+        ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
         IMAGE_TAG: latest
       run: |
         echo # Build a docker container and push it to ECR 
