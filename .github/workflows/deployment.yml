@@ -14,7 +14,7 @@ on:
       ecr-repository:
         description: 'ECR Repository Name'
         required: true
-        default: 'your-repo-name'
+        default: 'ipfs-metadata'
       image-tag:
         description: 'Image Tag'
         required: true
