@@ -1,24 +1,10 @@
-name: AWS ECR push
-
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
-    inputs:
-      ecr-registry:
-        description: 'ECR Registry URL'
-        required: true
-        default: 'http://dkr.ecr.us-west-2.amazonaws.com/'
-      ecr-repository:
-        description: 'ECR Repository Name'
-        required: true
-        default: 'ipfs-metadata'
-      image-tag:
-        description: 'Image Tag'
-        required: true
-        default: 'latest'
+
+name: AWS ECR push
 
 jobs:
   deploy:
@@ -43,11 +29,11 @@ jobs:
     - name: Build, tag, and push the image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: ${{ github.event.inputs.ecr-registry }}
-        ECR_REPOSITORY: ${{ github.event.inputs.ecr-repository }}
-        IMAGE_TAG: ${{ github.event.inputs.image-tag }}
+        ECR_REGISTRY: ${{ steps.login-ecr.user-input.registry }}
+        ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
+        IMAGE_TAG: latest
       run: |
-        # Build a Docker container and push it to ECR 
+        # Build a docker container and push it to ECR 
         docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" .
         echo "Pushing image to ECR..."
         docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
